@@ -8,9 +8,11 @@ import { Header } from './components/header'
 
 
 const AppContainer = styled.div`
-display: block;
+display: flex;
 width: 100%;
 height: 100%;
+align-items: stretch;
+flex-direction: column;
 `
 
 const App = ({ children }) => (

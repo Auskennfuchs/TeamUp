@@ -25,6 +25,7 @@ type UserType {
     age: Int
     slogan: String
     picture: String
+    fraction: String
     friends: [UserType]
     enemies: [UserType]
 }
@@ -48,6 +49,7 @@ input UpdateUserInputType {
 type Query {
     users: [UserType]
     user(id:String!): UserType
+    usersFraction(fraction:String!): [UserType]
 }
 
 type Mutation {
@@ -64,6 +66,9 @@ const resolvers = {
         },
         users: (_, args) => {
             return User.find({}).sort({ "name": 1 }).exec().then((users) => (users))
+        },
+        usersFraction: (_, {fraction}) => {
+            return User.find({"fraction":fraction}).sort({ "name": 1 }).exec().then((users) => (users))
         },
     },
     Mutation: {

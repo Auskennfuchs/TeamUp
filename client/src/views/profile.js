@@ -12,7 +12,7 @@ class Profile extends Component {
         return (
             <div className={this.props.className+" container-fluid"}>
                 <div className="row">
-                    <div className="col-sm-2">
+                    <div className="col-sm-2 no-overflow">
                         <div className="profilePicture">
                             <ProfilePicture userId={this.props.user.id} />
                         </div>
@@ -45,6 +45,7 @@ const mapStateToProps = (state) => (
 )
 
 export default connect(mapStateToProps, {})(styled(Profile)`
+    width: 100%;    
     .profilePicture {
         width: 100%;
         height: 20em;

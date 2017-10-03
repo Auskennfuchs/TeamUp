@@ -13,6 +13,7 @@ const Background = styled.div`
     display: flex;
     align-items: stretch;
     width: 100%;
+    height: 100%;
     flex: auto;
     background-image: url('/resources/teamupstart.png');
     background-position: center center;

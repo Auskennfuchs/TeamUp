@@ -15,7 +15,8 @@ query UserProfilePicture($userId:String!) {
 `
 
 const ProfilePictureStyled = styled.div.attrs({
-    picture: props => props.picture ? props.picture : '/resources/picturedummy.png'
+    picture: props => props.picture ? props.picture : '/resources/picturedummy.png',
+    rounded: props => props.rounded==="true" ? '50%' : '0'
 })`
     display: inline-block;
     background-image: url(${props => props.picture});
@@ -24,6 +25,7 @@ const ProfilePictureStyled = styled.div.attrs({
     background-repeat: no-repeat;
     width: 100%;
     height: 100%;
+    border-radius: ${props => props.rounded}
 `
 
 const ProfilePicture = ({ data: { loading, error, user } }) => {

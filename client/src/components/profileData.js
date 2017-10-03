@@ -11,7 +11,7 @@ import TextFieldGroup from './textfieldGroup'
 const userQuery = gql`
 query UserProfile($userId:String!) {
   user(id:$userId) {
-      _id, name, realName, age, slogan, city, picture
+      _id, name, realName, age, slogan, city, picture, fraction
   }
 }
 `
@@ -19,14 +19,12 @@ query UserProfile($userId:String!) {
 const updateUserDataMutation = gql`
 mutation updateUserData(
     $id: String!,
-    $name: String
     $realName: String
     $city: String
     $age: Int
     $slogan: String        
 ){
     updateUser(id:$id,user: {
-      name: $name,
       realName: $realName,
       city: $city,
       age: $age,
@@ -37,6 +35,7 @@ mutation updateUserData(
       city
       age
       slogan
+      fraction
     }
   }
 `
@@ -54,12 +53,12 @@ class UserProfile extends Component {
             city: props.user.city,
             age: props.user.age,
             slogan: props.user.slogan,
+            fraction: props.user.fraction
         }
     }
 
     onSubmit(e) {
         e.preventDefault()
-        console.log(this.state)
         this.props.mutate({
             variables: this.state
         }).then((user) => { this.setState({ user: user }) })
@@ -75,9 +74,6 @@ class UserProfile extends Component {
         return (
             <div className="container-fluid">
                 <form onSubmit={this.onSubmit}>
-                    <div className="row">
-                        <TextFieldGroup field="name" value={user.name} label="Name" onChange={this.onChange} />
-                    </div>
                     <div className="row">
                         <TextFieldGroup field="realName" value={user.realName} label="Real Name" onChange={this.onChange} />
                     </div>
@@ -108,9 +104,11 @@ const ProfileData = ({ data: { loading, error, user } }) => {
     if (error) {
         return <p>{error.message}</p>
     }
+    console.log(user)
     return (
         <div className="container-fluid">
             <h3>{user.name}</h3>
+            <span>serves the {user.fraction}</span>
             <UserProfileWithData user={user} />
         </div>
     )
