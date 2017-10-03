@@ -1,32 +1,27 @@
 import React from 'react'
 
-import UserList from '../components/userlist'
+import FractionList from '../components/fractionList'
 
-import {
-    gql,
-    graphql
-} from 'react-apollo';
+import styled from 'styled-components'
 
-const userListQuery = gql`
-query UserList {
-  users {
-    _id
-    name
-    picture
-  }
-}
+const EvilFractionList = styled(FractionList)`
+    background-color:#444;
+    a {
+        &:hover {
+            color:#fff;
+        }
+    }
 `
 
-const UserListView = ({ data: { loading, error, users } }) => {
-    if (loading) {
-        return <p>Loading...</p>
-    }
-    if (error) {
-        return <p>{error.message}</p>
-    }
-    return (
-        <UserList users={users} rounded="true"/>
-    )
-}
+const UserListView = () => (
+    <div className="container">
+        <div className="row">
+            <FractionList fraction="Good"/>
+        </div>
+        <div className="row">
+            <EvilFractionList fraction="Evil"/>
+        </div>
+    </div>
+)
 
-export default graphql(userListQuery)(UserListView)
+export default UserListView

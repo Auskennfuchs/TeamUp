@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { Component } from 'react'
 import {
     gql,
     graphql,
 } from 'react-apollo';
-import styled from 'styled-components'
+
+import Picture from './picture'
 
 
 const userPictureQuery = gql`
@@ -13,53 +14,25 @@ query UserProfilePicture($userId:String!) {
   }
 }
 `
-
-const ProfilePictureStyled = styled.div.attrs({
-    picture: props => props.picture ? props.picture : '/resources/picturedummy.png',
-    rounded: props => props.rounded==="true" ? '50%' : '0'
-})`
-    display: inline-block;
-    background-image: url(${props => props.picture});
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 100%;
-    border-radius: ${props => props.rounded}
-`
-
-const ProfilePicture = ({ data: { loading, error, user } }) => {
-    if(loading) {
-        return null
+class ProfilePicture extends Component {
+    render() {
+        const { data: { loading, error, user },rounded } = this.props
+        if (loading) {
+            return null
+        }
+        if (error) {
+            return (<p>{error.message}</p>)
+        }
+        return (
+            <Picture url={user.picture} rounded={rounded} />
+        )
     }
-    if(error) { 
-        return (<p>{error.message}</p>)
-    }
-    return (
-        <ProfilePictureStyled picture= { user.picture }/>
-    )
 }
 
-
-export const UserPic = styled.div.attrs({
-    borderRadius: props => props.rounded==="true" ? '50%' : '0',
-    size: props => props.size? props.size: '5rem'
-})`
-    display:block;
-    border-radius: ${props => props.borderRadius};
-    width: ${props => props.size};
-    height: ${props => props.size};                        
-    margin: auto;
-    background-image: url(${props => props.url});
-    background-position: center;
-    background-size: cover;
-    max-width: 100%;
-    background-repeat: no-repeat;
-`
-
- 
 export default graphql(userPictureQuery, {
     options: ({ userId }) => ({
-        variables: { userId }
+        variables: {
+            userId
+        }
     })
 })(ProfilePicture)

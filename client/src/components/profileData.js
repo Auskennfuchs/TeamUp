@@ -104,7 +104,6 @@ const ProfileData = ({ data: { loading, error, user } }) => {
     if (error) {
         return <p>{error.message}</p>
     }
-    console.log(user)
     return (
         <div className="container-fluid">
             <h3>{user.name}</h3>

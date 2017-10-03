@@ -18,7 +18,7 @@ class _Header extends Component {
                         <nav>
                             <NavLink to="/users">Find People</NavLink>
                             <NavLink to="/contacts">Contacts</NavLink>
-                            <NavLink to="/profile" className="picture"><ProfilePicture userId={this.props.user.id} /></NavLink>
+                            <NavLink to="/profile" className="picture"><ProfilePicture userId={this.props.user.id} rounded="true"/></NavLink>
                             <LogoutButton />
                         </nav>
                     )

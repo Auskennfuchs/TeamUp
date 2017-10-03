@@ -95,7 +95,7 @@ const resolvers = {
             return User.find({ "_id": { "$in": user.friends || [] } }).sort({ "name": 1 }).exec((e, users) => (users))
         },
         enemies: (user, args, { db }) => {
-            return User.find({ "_id": { "$in": user.friends || [] } }).sort({ "name": 1 }).exec((e, users) => (users))
+            return User.find({ "_id": { "$in": user.enemies || [] } }).sort({ "name": 1 }).exec((e, users) => (users))
         }
     }
 }
