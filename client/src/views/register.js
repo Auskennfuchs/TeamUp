@@ -52,7 +52,7 @@ class Register extends Component {
                     (err) => this.setState({ errors: err.response.data.errors, isLoading: false })
                 )
             )
-        )
+            )
     }
 
     onChange(e) {
@@ -64,7 +64,10 @@ class Register extends Component {
         const fractions = ["Good", "Evil"]
         return (
             <form onSubmit={this.onSubmit}>
-                <div className="container-fluid">
+                <div className="container">
+                    <div className="row">
+                        <h2>Create new acccount</h2>
+                    </div>
                     <div className="row">
                         <TextFieldGroup field="name" value="" label="Name" onChange={this.onChange} />
                     </div>

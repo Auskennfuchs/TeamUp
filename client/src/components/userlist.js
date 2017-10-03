@@ -9,11 +9,13 @@ class UserListComponent extends Component {
             return (<h4>{this.props.emptyMessage}</h4>)
         }
         return (
-            <ul className={this.props.className+ " container-fluid"}>
+            <ul className={this.props.className}>
                 {this.props.users.map((user) => (
                     <li key={user._id} className="col-sm-2">
                         <Link to={`/user/${user._id}`}>
-                            <Picture url={user.picture}/>
+                            <div>
+                                <Picture url={user.picture}/>
+                            </div>
                             <span>{user.name}</span>
                         </Link>
                     </li>
@@ -26,11 +28,14 @@ class UserListComponent extends Component {
 export default styled(UserListComponent)`
     list-style-type:none;
     width: 100%;
+    display: inline-block;
+    margin: 0;
     > li {
         display: inline-block;
         padding: 0.4rem;
         font-weight: bold;
         width: 10%;
+        height: 12em;
         
         div {
             display: block;

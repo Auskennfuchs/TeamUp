@@ -7,8 +7,8 @@ class Home extends Component {
 
     render() {
         return (
-            <div>
-                Hello
+            <div className="container">
+                <h1 className="center-align">Hello {this.props.user.username}</h1>
             </div>
         )
     }

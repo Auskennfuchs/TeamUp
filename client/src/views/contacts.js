@@ -11,6 +11,7 @@ import UserList from '../components/userlist'
 const userQuery = gql`
 query FriendEnemies($userId:String!) {
   user(id:$userId) {
+      _id
       friends {
           _id,name, picture
       }
@@ -29,10 +30,12 @@ const ContactList = ({ data: { loading, error, user } }) => {
         return <p>{error.message}</p>
     }
     return (
-        <div>
-            <h3>Friends</h3>
-            <UserList users={user.friends} emptyMessage="You have no friends. Hello darkness my old friend ;(" />
-            <h3>Enemies</h3>
+        <div class="container">
+            <h2>Friends</h2>
+            <div className="row">
+                <UserList users={user.friends} emptyMessage="No friends. Hello darkness my old friend ;(" />
+            </div>
+            <h2>Enemies</h2>
             <UserList users={user.enemies} emptyMessage="No enemies" />
         </div>
     )

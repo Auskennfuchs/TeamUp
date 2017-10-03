@@ -56,6 +56,7 @@ type Mutation {
     createUser(user: CreateUserInputType): UserType
     updateUser(id:String!, user: UpdateUserInputType): UserType
     addFriend(userId:String!, friendId:String!): Boolean
+    addEnemy(userId:String!, enemyId:String!): Boolean
 }
 `;
 
@@ -67,8 +68,8 @@ const resolvers = {
         users: (_, args) => {
             return User.find({}).sort({ "name": 1 }).exec().then((users) => (users))
         },
-        usersFraction: (_, {fraction}) => {
-            return User.find({"fraction":fraction}).sort({ "name": 1 }).exec().then((users) => (users))
+        usersFraction: (_, { fraction }) => {
+            return User.find({ "fraction": fraction }).sort({ "name": 1 }).exec().then((users) => (users))
         },
     },
     Mutation: {
@@ -76,14 +77,22 @@ const resolvers = {
             var user = new User({ name: user.name, city: user.city, fraction: user.fraction })
             return user.save((e, user) => (user))
         },
-        updateUser: (_, {id,user}, { db }) => {
-            return User.findOneAndUpdate({ "_id": id }, user,{new: true}).exec().then(
-                    (user) => (user)
+        updateUser: (_, { id, user }, { db }) => {
+            return User.findOneAndUpdate({ "_id": id }, user, { new: true }).exec().then(
+                (user) => (user)
             ).catch((err) => Promise.reject(err))
         },
         addFriend: (_, args) => {
             return insertFriend(args.userId, args.friendId)
                 .then(() => (insertFriend(args.friendId, args.userId)))
+                .catch((err) => {
+                    console.log(err.message)
+                    return false
+                })
+        },
+        addEnemy: (_, { userId, enemyId }) => {
+            return insertEnemy(userId, enemyId)
+                .then(() => (insertEnemy(enemyId, userId)))
                 .catch((err) => {
                     console.log(err.message)
                     return false
@@ -101,19 +110,33 @@ const resolvers = {
 }
 
 function insertFriend(userId, friendId) {
-    var query = User.findOne({ "_id": userId }, {});
-    var promise = query.exec()
-    return promise.then(user => {
-        console.log(user)
-        user.friends = user.friends || []
-        var foundFriend = user.friends.find(f => (f == friendId))
-        if (foundFriend != undefined) {
-            //already in the list
-            return Promise.reject(Error("already in list"))
-        }
-        user.friends.push(friendId)
-        return user.save()
-    })
+    return User.findOne({ "_id": userId }, {})
+        .exec()
+        .then(user => {
+            user.friends = user.friends || []
+            var foundFriend = user.friends.find(f => (f == friendId))
+            if (foundFriend != undefined) {
+                //already in the list
+                return Promise.reject(Error("already in list"))
+            }
+            user.friends.push(friendId)
+            return user.save()
+        })
+}
+
+function insertEnemy(userId, enemyId) {
+    return User.findOne({ "_id": userId }, {})
+        .exec()
+        .then(user => {
+            user.enemies = user.enemies || []
+            var foundEnemy = user.enemies.find(f => (f == enemyId))
+            if (foundEnemy != undefined) {
+                //already in the list
+                return Promise.reject(Error("already in list"))
+            }
+            user.enemies.push(enemyId)
+            return user.save()
+        })
 }
 
 export default makeExecutableSchema({ typeDefs, resolvers })

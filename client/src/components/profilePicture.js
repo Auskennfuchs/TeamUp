@@ -10,6 +10,7 @@ import Picture from './picture'
 const userPictureQuery = gql`
 query UserProfilePicture($userId:String!) {
   user(id:$userId) {
+      _id
       picture
   }
 }
