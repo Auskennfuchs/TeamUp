@@ -1,20 +1,14 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
+//import styled from 'styled-components'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import LogoutButton from '../components/logoutButton'
 
 class Home extends Component {
 
-    componentWillMount() {
-        this.context.router.history.push('/login')
-    }
-
     render() {
         return (
-            <div>Hello {this.props.user.username} {this.props.authenticated}
-                <LogoutButton />
-
+            <div>
+                Hello
             </div>
         )
     }
@@ -33,7 +27,7 @@ Home.contextTypes = {
 const mapStateToProps = (state) => (
     {
         authenticated: state.auth.isAuthenticated,
-        user: state.auth.user
+        user: state.session.user
     }
 )
 

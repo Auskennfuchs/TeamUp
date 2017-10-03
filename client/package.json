@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "react-scripts": "1.0.14",
     "normalize.css": "^7.0.0",
+    "react": "^16.0.0",
+    "react-apollo": "^1.4.16",
+    "react-dom": "^16.0.0",
+    "react-fa": "^4.2.0",
+    "react-scripts": "1.0.14",
     "reset-css": "^2.2.1",
     "styled-components": "^2.1.2"
   },

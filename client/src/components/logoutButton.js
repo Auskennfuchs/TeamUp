@@ -1,6 +1,9 @@
-/*import React, { Component } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
+
+import Icon from 'react-fa'
 
 import { logout } from '../actions/authActions'
 
@@ -13,15 +16,17 @@ class LogoutButton extends Component {
 
     onLogout(e) {
         e.preventDefault()
-        console.log(this.props)
-        this.props.logout(null).then(
-            res => this.context.router.history.push("/login")   
+        this.props.logout().then(
+            (res) => this.context.router.history.push('/login'),
+            (err) => (null)
         )
     }
 
     render() {
         return (
-            <button onClick={this.onLogout}>Logout</button>
+            <div onClick={this.onLogout} className={this.props.className}>
+                <Icon name="power-off"/>
+            </div>
         )
     }
 }
@@ -34,4 +39,10 @@ LogoutButton.contextTypes = {
     router: PropTypes.object.isRequired
 }
 
-export default connect(null, { logout })(LogoutButton)*/
+export default styled(connect(null, { logout })(LogoutButton))`
+    display: inline-block;
+    &:hover {
+        cursor: pointer;
+        font-size: 1.2em;
+    }
+`

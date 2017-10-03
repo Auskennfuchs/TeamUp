@@ -21,11 +21,11 @@ app.use((req,res,next)=> {
     next()
 })
 
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '50mb'}))
 
 app.use('/auth', cors(), auth )
 
-app.use('/user',cors(), expressGraphQL(req => {
+app.use('/teamupGQL',cors(), expressGraphQL(req => {
     return {
         schema: schema,
         context: {

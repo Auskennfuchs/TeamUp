@@ -1,26 +1,29 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components'
-import { BrowserRouter } from 'react-router-dom';
-import routes from './routes';
+import PropTypes from 'prop-types'
+
+import { Client } from './apolloclient'
+import { ApolloProvider } from 'react-apollo';
+import { Header } from './components/header'
+
 
 const AppContainer = styled.div`
-display: flex;
+display: block;
 width: 100%;
 height: 100%;
-flex-direction: column;
 `
 
-class App extends Component {
+const App = ({ children }) => (
+  <ApolloProvider client={Client}>
+    <AppContainer>
+      <Header />
+        {children}
+    </AppContainer>
+  </ApolloProvider>
+)
 
-  render() {
-    return (
-      <AppContainer>
-        <BrowserRouter>
-          {routes}
-        </BrowserRouter>
-      </AppContainer>
-    );
-  }
+App.propTypes = {
+  children: PropTypes.object.isRequired
 }
 
 export default App

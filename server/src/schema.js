@@ -11,6 +11,8 @@ import {
 
 import { makeExecutableSchema } from 'graphql-tools'
 
+import merge from 'lodash/merge'
+
 import User from './model/user'
 
 const typeDefs = `
@@ -27,17 +29,19 @@ type UserType {
     enemies: [UserType]
 }
 
-input UserInputType {
+input CreateUserInputType {
     name: String!
-    age: Int
+    city: String!
+    fraction: String!
 }
 
 input UpdateUserInputType {
     name: String
-    firstname: String
-    email: String
+    realName: String
     city: String
     age: Int
+    picture: String
+    slogan: String    
     picture: String
 }
 
@@ -47,7 +51,7 @@ type Query {
 }
 
 type Mutation {
-    addUser(user: UserInputType): UserType
+    createUser(user: CreateUserInputType): UserType
     updateUser(id:String!, user: UpdateUserInputType): UserType
     addFriend(userId:String!, friendId:String!): Boolean
 }
@@ -55,31 +59,24 @@ type Mutation {
 
 const resolvers = {
     Query: {
-        user: (_, args) => {
-            return User.find({ "_id": args.id }, {}, (e, user) => (user))
+        user: (_, { id }) => {
+            return User.findOne({ "_id": id }, {}).exec().then((user) => (user))
         },
         users: (_, args) => {
-            return User.find({}).sort({ "name": 1 }).exec((e, docs) => (docs))
+            return User.find({}).sort({ "name": 1 }).exec().then((users) => (users))
         },
     },
     Mutation: {
-        addUser: (_, args) => {
-            var user = new User({ name: args.user.name, age: args.user.age })
+        createUser: (_, { user }) => {
+            var user = new User({ name: user.name, city: user.city, fraction: user.fraction })
             return user.save((e, user) => (user))
         },
-        updateUser: (_, args, { db }) => {
-            var collection = db.get('User')
-            return collection.findOne({ "_id": args.id }, {})
-                .then(user => {
-                    merge(user, args.user)
-                    console.log(user)
-                    return collection.update({ "_id": user._id }, user)
-                        .then(() => (collection.findOne({ "_id": user._id })))
-                })
-                .catch((err) => Promise.reject(err))
+        updateUser: (_, {id,user}, { db }) => {
+            return User.findOneAndUpdate({ "_id": id }, user,{new: true}).exec().then(
+                    (user) => (user)
+            ).catch((err) => Promise.reject(err))
         },
         addFriend: (_, args) => {
-            console.log(args.friendId)
             return insertFriend(args.userId, args.friendId)
                 .then(() => (insertFriend(args.friendId, args.userId)))
                 .catch((err) => {
@@ -102,6 +99,7 @@ function insertFriend(userId, friendId) {
     var query = User.findOne({ "_id": userId }, {});
     var promise = query.exec()
     return promise.then(user => {
+        console.log(user)
         user.friends = user.friends || []
         var foundFriend = user.friends.find(f => (f == friendId))
         if (foundFriend != undefined) {

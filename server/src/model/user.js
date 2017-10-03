@@ -10,6 +10,7 @@ var User = new Schema({
     age: Number,
     slogan: String,
     picture: String,
+    fraction: String,
     friends: { type: Array, default: [] },
     enemies: { type: Array, default: [] }
 },{

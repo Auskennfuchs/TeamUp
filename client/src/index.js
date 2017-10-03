@@ -2,45 +2,38 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import 'reset-css/reset.css'
 import 'normalize.css'
+import 'bootstrap/dist/css/bootstrap.css'
 import './index.css';
-
-import App from './App'
 
 import registerServiceWorker from './registerServiceWorker'
 
 import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
-//import { persistStore, autoRehydrate } from 'redux-persist'
-import { createSession } from 'redux-session'
+import { persistStore, autoRehydrate } from 'redux-persist'
+import { sessionService } from 'redux-react-session';
 import thunk from 'redux-thunk'
 
 import rootReducer from './reducers/rootReducer'
 
-const session = createSession({
-    ns: 'teamup',
-    onLoad(storedState, dispatch) {
-        dispatch({ type: 'HYDRATE_STATE', storedState })
-    },
-    clearStorage(action) {
-        return action.type === 'DROP_SESSION_DATA'
-    }
-})
+import routes from './routes';
+
 const store = createStore(
     rootReducer,
+    undefined,
     compose(
         applyMiddleware(thunk),
-        applyMiddleware(session),
         window.devToolsExtension ? window.devToolsExtension() : f => f,
+        autoRehydrate()
     )
 )
 
-store.dispatch({type:'DROP_SESSION_DATA'})
+sessionService.initSessionService(store)
 
-//persistStore(store, {}, () => {
-ReactDOM.render(
+persistStore(store, {}, () => {
+    ReactDOM.render(
         <Provider store={store}>
-            <App />
+            {routes}
         </Provider>,
         document.getElementById('root'));
     registerServiceWorker()
-//})
+})

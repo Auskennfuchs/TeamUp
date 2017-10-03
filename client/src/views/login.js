@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import {Link} from 'react-router-dom'
 
 import { login } from '../actions/authActions'
 
@@ -44,7 +45,7 @@ class Login extends Component {
         if (this.isValid()) {
             this.setState({ errors: {}, isLoading: true })
             this.props.login(this.state).then(
-                (res) => this.context.router.history.push('/home'),
+                (res) => this.context.router.history.replace('/'),
                 (err) => this.setState({ errors: err.response.data.errors, isLoading: false })
             )
         }
@@ -56,7 +57,6 @@ class Login extends Component {
 
     render() {
         const { identifier, isLoading, errors } = this.state
-        console.log(errors)
         return (
             <Background>
                 <form onSubmit={this.onSubmit}>
@@ -65,6 +65,7 @@ class Login extends Component {
                     <input type="text" id="identifier" name="identifier" value={identifier} onChange={this.onChange} />
                     <button disabled={isLoading} >Login</button>
                     <div>{errors.identifier}</div>
+                    <Link to="/register">Register</Link>
                 </form>
             </Background>
         )
